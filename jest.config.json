@@ -1,0 +1,8 @@
+{
+  "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+  "testDirectoryName": "tests",
+  "testFileExtensions": ["test.js"],
+  "moduleFileExtensions": ["js", "json"],
+  "unmockedModulePathPatterns": ["react", "react-dom"],
+  "collectCoverage": true
+}
