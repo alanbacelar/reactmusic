@@ -8,7 +8,7 @@ class PlayerControls extends React.Component {
 
   constructor() {
     super();
-    this.state = {playlist: false, track: false};
+    this.state = this.getState();
 
     PlayerStore.addChangeListener(this.updateState.bind(this));
 
@@ -23,38 +23,48 @@ class PlayerControls extends React.Component {
     this.updateState();
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     PlayerStore.removeChangeListener(this.updateState.bind(this));
   }
 
-  updateState() {
+  getState() {
     let playlist = PlayerStore.getPlaylist();
     let track = PlayerStore.getActiveTrack();
     let tracks = PlayerStore.getActiveTracks();
     let trackStatus = PlayerStore.getActiveTrackStatus();
 
-    this.setState({
+    return {
       playlist: playlist,
+      noPlaylistClassName: (!track) ? 'no-track' : '',
       track: track,
       tracks: tracks,
       trackStatus: trackStatus,
       sound: this.getSound(track.preview_url, trackStatus)
-    });
+    }
+  }
+
+  updateState() {
+    this.setState(this.getState());
   }
 
   getSound(url, status) {
     if (url) {
-      return <Sound url={url} playStatus={status} />;  
+      return <Sound url={url} playStatus={status} onFinishedPlaying={this.handleSongFinishedPlaying.bind(this)} />;  
     }
 
     return null;
   }
 
+  handleSongFinishedPlaying(e) {
+    PlayerActions.stop();
+    this.forward();
+  }
+
   getPlayButton() {
-    let button = (<a className="jp-play" onClick={this.play.bind(this)}><i className="icon-control-play i-2x"></i></a>);
+    let button = (<a className={`jp-play ${this.state.noPlaylistClassName}`} onClick={this.play.bind(this)}><i className="icon-control-play i-2x"></i></a>);
     
     if (this.state.trackStatus == Sound.status.PLAYING) {
-      button = (<a className="jp-pause" onClick={this.pause.bind(this)}><i className="icon-control-pause i-2x"></i></a>);
+      button = (<a className={`jp-pause ${this.state.noPlaylistClassName}`} onClick={this.pause.bind(this)}><i className="icon-control-pause i-2x"></i></a>);
     }
     
     return (<div>{button}</div>);
@@ -63,7 +73,7 @@ class PlayerControls extends React.Component {
   getStopButton() {
     return (
       <div>
-        <a className="jp-stop" onClick={this.stop.bind(this)}><i className="fa fa-stop"></i></a>
+        <a className={`jp-stop ${this.state.noPlaylistClassName}`} onClick={this.stop.bind(this)}><i className="fa fa-stop"></i></a>
       </div>
     );
   }
@@ -127,24 +137,24 @@ class PlayerControls extends React.Component {
   render() {
     let item = this.state.playlist || {};
     let owner = item.owner || {};
-    let link = `/playlist/${owner.id}/${item.id}`;
+    let link = (owner.id) ? `/playlist/${owner.id}/${item.id}` : '/songs';
 
     return (
         <div className="jp-controls">
           <div>
-            <a className="jp-previous" onClick={this.rewind.bind(this)}><i className="icon-control-rewind i-lg"></i></a>
+            <a className={`jp-previous ${this.state.noPlaylistClassName}`} onClick={this.rewind.bind(this)}><i className="icon-control-rewind i-lg"></i></a>
           </div>
 
           {this.getPlayButton()}
 
           <div>
-            <a className="jp-next" onClick={this.forward.bind(this)}><i className="icon-control-forward i-lg"></i></a>
+            <a className={`jp-next ${this.state.noPlaylistClassName}`} onClick={this.forward.bind(this)}><i className="icon-control-forward i-lg"></i></a>
           </div>
           
           {this.getStopButton()}
 
           <div>
-            <Link to={link}>
+            <Link to={link} className={`${this.state.noPlaylistClassName}`}>
                 <i className="icon-list"></i>
             </Link>
           </div>

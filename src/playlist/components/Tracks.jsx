@@ -18,7 +18,7 @@ class Tracks extends React.Component {
     this.updateState();
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     PlayerStore.removeChangeListener(this.updateState.bind(this));
   }
 
@@ -45,10 +45,10 @@ class Tracks extends React.Component {
 
     return (
       <li className="list-group-item" key={key}>
-          <div className="pull-right m-l">
+          {/*<div className="pull-right m-l">
             <a href="javascript:void(0)" className="m-r-sm"><i className="icon-plus"></i></a>
             <a href="javascript:void(0)"><i className="icon-close"></i></a>
-          </div>
+          </div>*/}
 
           <a href="javascript:void(0)" className="jp-play-me m-r-sm pull-left">
             {this.getPlayButton(track)}

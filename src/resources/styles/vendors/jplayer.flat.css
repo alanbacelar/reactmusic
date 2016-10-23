@@ -179,6 +179,11 @@ a.jp-playlist-current:before{
 	opacity: 0.6;
 }
 
+.no-track {
+	pointer-events: none;
+    cursor: default !important;
+    color: #4c5863 !important;
+}
 
 @media (max-width: 767px) {
 	.footer .jp-gui{

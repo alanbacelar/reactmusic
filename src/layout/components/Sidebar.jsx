@@ -1,5 +1,6 @@
 import React from 'react';
 import Playlists from './Menu/Playlists.jsx';
+import {Link} from 'react-router';
 
 class Sidebar extends React.Component {
 
@@ -36,10 +37,10 @@ class Sidebar extends React.Component {
 	                    </li>
 
 	                    <li>
-	                      <a href="javascript:void(0)">
+	                      <Link to={'/songs'}>
 	                        <i className="icon-disc icon text-success"></i>
 	                        <span className="font-bold">Songs</span>
-	                      </a>
+	                      </Link>
 	                    </li>
 	                    <li>
 	                      <a href="javascript:void(0)">

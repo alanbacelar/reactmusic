@@ -14,6 +14,10 @@ class SpotifyApi {
         return resource(`users/${user_id}/playlists/${playlist_id}`);
     }
 
+    getMySongs() {
+        return resource(`me/tracks?offset=0&limit=50`);
+    }
+
 }
 
 export default new SpotifyApi();
